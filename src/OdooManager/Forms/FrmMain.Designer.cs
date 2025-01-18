@@ -28,9 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
-            exitToolStripMenuItem = new ToolStripMenuItem();
+            btnExit = new ToolStripMenuItem();
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
             tableLayoutPanel1 = new TableLayoutPanel();
@@ -44,12 +45,25 @@
             txtPass = new TextBox();
             btnConnect = new Button();
             tabPage2 = new TabPage();
+            dgSessions = new DataGridView();
+            toolStrip1 = new ToolStrip();
+            btnLoadAllSessions = new ToolStripButton();
+            toolStripLabel1 = new ToolStripLabel();
+            txtSessionId = new ToolStripTextBox();
+            toolStripButton1 = new ToolStripButton();
+            lblCount = new ToolStripLabel();
+            toolStripSeparator1 = new ToolStripSeparator();
+            toolStripLabel2 = new ToolStripLabel();
+            btnDelSession = new ToolStripButton();
             tabPage3 = new TabPage();
             tabPage4 = new TabPage();
             menuStrip1.SuspendLayout();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
+            tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgSessions).BeginInit();
+            toolStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
@@ -63,16 +77,17 @@
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { exitToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { btnExit });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(37, 20);
             fileToolStripMenuItem.Text = "File";
             // 
-            // exitToolStripMenuItem
+            // btnExit
             // 
-            exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new Size(93, 22);
-            exitToolStripMenuItem.Text = "Exit";
+            btnExit.Name = "btnExit";
+            btnExit.Size = new Size(93, 22);
+            btnExit.Text = "Exit";
+            btnExit.Click += btnExit_Click;
             // 
             // tabControl1
             // 
@@ -103,7 +118,7 @@
             tableLayoutPanel1.ColumnCount = 3;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle());
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 83F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle());
             tableLayoutPanel1.Controls.Add(label1, 0, 0);
             tableLayoutPanel1.Controls.Add(txtServer, 1, 0);
             tableLayoutPanel1.Controls.Add(label2, 0, 1);
@@ -207,16 +222,18 @@
             // 
             // btnConnect
             // 
-            btnConnect.Location = new Point(706, 119);
+            btnConnect.Location = new Point(659, 119);
             btnConnect.Name = "btnConnect";
-            btnConnect.Size = new Size(75, 23);
+            btnConnect.Size = new Size(124, 23);
             btnConnect.TabIndex = 2;
-            btnConnect.Text = "Connect";
+            btnConnect.Text = "Test connection";
             btnConnect.UseVisualStyleBackColor = true;
             btnConnect.Click += btnConnect_Click;
             // 
             // tabPage2
             // 
+            tabPage2.Controls.Add(dgSessions);
+            tabPage2.Controls.Add(toolStrip1);
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
@@ -224,6 +241,89 @@
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Sessions";
             tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // dgSessions
+            // 
+            dgSessions.AllowUserToAddRows = false;
+            dgSessions.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgSessions.Dock = DockStyle.Fill;
+            dgSessions.Location = new Point(3, 28);
+            dgSessions.Name = "dgSessions";
+            dgSessions.ReadOnly = true;
+            dgSessions.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgSessions.Size = new Size(786, 367);
+            dgSessions.TabIndex = 1;
+            dgSessions.CellContentDoubleClick += dgSessions_CellContentDoubleClick;
+            // 
+            // toolStrip1
+            // 
+            toolStrip1.Items.AddRange(new ToolStripItem[] { btnLoadAllSessions, toolStripLabel1, txtSessionId, toolStripButton1, lblCount, toolStripSeparator1, toolStripLabel2, btnDelSession });
+            toolStrip1.Location = new Point(3, 3);
+            toolStrip1.Name = "toolStrip1";
+            toolStrip1.Size = new Size(786, 25);
+            toolStrip1.TabIndex = 0;
+            toolStrip1.Text = "toolStrip1";
+            // 
+            // btnLoadAllSessions
+            // 
+            btnLoadAllSessions.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            btnLoadAllSessions.Image = (Image)resources.GetObject("btnLoadAllSessions.Image");
+            btnLoadAllSessions.ImageTransparentColor = Color.Magenta;
+            btnLoadAllSessions.Name = "btnLoadAllSessions";
+            btnLoadAllSessions.Size = new Size(98, 22);
+            btnLoadAllSessions.Text = "Load all sessions";
+            btnLoadAllSessions.Click += btnLoadAllSessions_Click;
+            // 
+            // toolStripLabel1
+            // 
+            toolStripLabel1.Name = "toolStripLabel1";
+            toolStripLabel1.Size = new Size(71, 22);
+            toolStripLabel1.Text = "Find session";
+            // 
+            // txtSessionId
+            // 
+            txtSessionId.Name = "txtSessionId";
+            txtSessionId.Size = new Size(100, 25);
+            // 
+            // toolStripButton1
+            // 
+            toolStripButton1.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            toolStripButton1.Image = (Image)resources.GetObject("toolStripButton1.Image");
+            toolStripButton1.ImageTransparentColor = Color.Magenta;
+            toolStripButton1.Name = "toolStripButton1";
+            toolStripButton1.Size = new Size(34, 22);
+            toolStripButton1.Text = "Find";
+            toolStripButton1.Click += toolStripButton1_Click;
+            // 
+            // lblCount
+            // 
+            lblCount.Alignment = ToolStripItemAlignment.Right;
+            lblCount.Name = "lblCount";
+            lblCount.Size = new Size(13, 22);
+            lblCount.Text = "0";
+            // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(6, 25);
+            // 
+            // toolStripLabel2
+            // 
+            toolStripLabel2.Alignment = ToolStripItemAlignment.Right;
+            toolStripLabel2.Name = "toolStripLabel2";
+            toolStripLabel2.Size = new Size(43, 22);
+            toolStripLabel2.Text = "Count:";
+            // 
+            // btnDelSession
+            // 
+            btnDelSession.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            btnDelSession.ForeColor = Color.Red;
+            btnDelSession.Image = (Image)resources.GetObject("btnDelSession.Image");
+            btnDelSession.ImageTransparentColor = Color.Magenta;
+            btnDelSession.Name = "btnDelSession";
+            btnDelSession.Size = new Size(44, 22);
+            btnDelSession.Text = "Delete";
+            btnDelSession.Click += btnDelSession_Click;
             // 
             // tabPage3
             // 
@@ -254,6 +354,7 @@
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
             Name = "FrmMain";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "OdooManager";
             Load += FrmMain_Load;
             menuStrip1.ResumeLayout(false);
@@ -262,6 +363,11 @@
             tabPage1.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
+            tabPage2.ResumeLayout(false);
+            tabPage2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgSessions).EndInit();
+            toolStrip1.ResumeLayout(false);
+            toolStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -269,7 +375,7 @@
         #endregion
         private MenuStrip menuStrip1;
         private ToolStripMenuItem fileToolStripMenuItem;
-        private ToolStripMenuItem exitToolStripMenuItem;
+        private ToolStripMenuItem btnExit;
         private TabControl tabControl1;
         private TabPage tabPage1;
         private TabPage tabPage2;
@@ -285,5 +391,15 @@
         private Label label4;
         private TextBox txtPass;
         private Button btnConnect;
+        private ToolStrip toolStrip1;
+        private DataGridView dgSessions;
+        private ToolStripButton btnLoadAllSessions;
+        private ToolStripLabel toolStripLabel1;
+        private ToolStripTextBox txtSessionId;
+        private ToolStripButton toolStripButton1;
+        private ToolStripLabel toolStripLabel2;
+        private ToolStripLabel lblCount;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripButton btnDelSession;
     }
 }
