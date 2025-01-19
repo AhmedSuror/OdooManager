@@ -8,11 +8,9 @@ namespace OdooManager.Forms;
 
 public partial class FrmMain : Form
 {
+    #region Variables
     public static string conStr = "";
-    public FrmMain()
-    {
-        InitializeComponent();
-    }
+    #endregion
 
     #region Functions
     public bool PrepareConnectionString()
@@ -28,16 +26,19 @@ public partial class FrmMain : Form
 
         return false;
     }
+
     public void ShowConnectionError()
     {
         tabPage1.Show();
         MessageBox.Show(this, "Test connection first.", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
     }
+
     public void ToggleControlsState(bool enabled)
     {
         UseWaitCursor = !enabled;
         tabControl1.Enabled = enabled;
     }
+
     private async Task FindAllSessionsAsync()
     {
         using (var con = NpgsqlDataSource.Create(conStr))
@@ -48,10 +49,10 @@ public partial class FrmMain : Form
             da.Fill(ds, "pos_session");
             dgSessions.DataSource = ds;
             dgSessions.DataMember = ds.Tables[0].TableName;
-            lblCount.Text = ds.Tables[0].Rows.Count.ToString();
-            MessageBox.Show(this, "Data loaded!", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            lblSessionCount.Text = ds.Tables[0].Rows.Count.ToString();
         }
     }
+
     private async Task FindSessionAsync(int sessionId)
     {
         using (var con = NpgsqlDataSource.Create(conStr))
@@ -62,12 +63,59 @@ public partial class FrmMain : Form
             da.Fill(ds, "pos_session");
             dgSessions.DataSource = ds;
             dgSessions.DataMember = ds.Tables[0].TableName;
-            lblCount.Text = ds.Tables[0].Rows.Count.ToString();
-            MessageBox.Show(this, "Data loaded!", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            lblSessionCount.Text = ds.Tables[0].Rows.Count.ToString();
         }
     }
+
+    private async Task FindAllOrdersAsync()
+    {
+        using (var con = NpgsqlDataSource.Create(conStr))
+        {
+            var da = new NpgsqlDataAdapter("SELECT * FROM pos_order p;", await con.OpenConnectionAsync());
+            DataSet ds = new();
+            //da.FillSchema(ds, SchemaType.Source);
+            da.Fill(ds, "pos_order");
+            dgOrders.DataSource = ds;
+            dgOrders.DataMember = ds.Tables[0].TableName;
+            lblOrderCount.Text = ds.Tables[0].Rows.Count.ToString();
+        }
+    }
+
+    private async Task FindOrderByIdAsync(int orderId)
+    {
+        using (var con = NpgsqlDataSource.Create(conStr))
+        {
+            var da = new NpgsqlDataAdapter($"SELECT * FROM pos_order p where p.id = {orderId};", await con.OpenConnectionAsync());
+            DataSet ds = new();
+            //da.FillSchema(ds, SchemaType.Source);
+            da.Fill(ds, "pos_order");
+            dgOrders.DataSource = ds;
+            dgOrders.DataMember = ds.Tables[0].TableName;
+            lblOrderCount.Text = ds.Tables[0].Rows.Count.ToString();
+        }
+    }
+
+    private async Task FindOrdersBySessionIdAsync(int sid)
+    {
+        using (var con = NpgsqlDataSource.Create(conStr))
+        {
+            var da = new NpgsqlDataAdapter($"SELECT * FROM pos_order p where p.session_id = {sid};", await con.OpenConnectionAsync());
+            DataSet ds = new();
+            //da.FillSchema(ds, SchemaType.Source);
+            da.Fill(ds, "pos_order");
+            dgOrders.DataSource = ds;
+            dgOrders.DataMember = ds.Tables[0].TableName;
+            lblOrderCount.Text = ds.Tables[0].Rows.Count.ToString();
+        }
+    }
+
     #endregion
 
+    #region General
+    public FrmMain()
+    {
+        InitializeComponent();
+    }
     private void FrmMain_Load(object sender, EventArgs e)
     {
         txtServer.Text = Properties.Settings.Default.Server;
@@ -145,7 +193,9 @@ public partial class FrmMain : Form
     {
         Application.Exit();
     }
+    #endregion
 
+    #region Sessions
     private async void btnLoadAllSessions_Click(object sender, EventArgs e)
     {
         if (PrepareConnectionString())
@@ -161,8 +211,7 @@ public partial class FrmMain : Form
 
     }
 
-
-    private async void toolStripButton1_Click(object sender, EventArgs e)
+    private async void btnFindSession_Click(object sender, EventArgs e)
     {
         int sid;
         if (string.IsNullOrWhiteSpace(txtSessionId.Text))
@@ -241,8 +290,133 @@ public partial class FrmMain : Form
         {
             if (e.ColumnIndex == 0)
             {
-                MessageBox.Show(dgSessions.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
+                //MessageBox.Show(dgSessions.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
+                var sid = dgSessions.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                tabControl1.SelectedTab = tabPage3;
+                txtOrderId.Text = sid;
+                btnFindOrderBySID.PerformClick();
             }
         }
+    }
+    #endregion
+
+    #region Orders
+    private async void btnAllOrders_Click(object sender, EventArgs e)
+    {
+        if (PrepareConnectionString())
+        {
+            ToggleControlsState(false);
+            await FindAllOrdersAsync();
+        }
+        else
+        {
+            ShowConnectionError();
+        }
+        ToggleControlsState(true);
+    }
+
+    private async void btnFindOrderById_Click(object sender, EventArgs e)
+    {
+        int oid;
+        if (string.IsNullOrWhiteSpace(txtOrderId.Text))
+        {
+            MessageBox.Show(this, "Enter order Id first.", "Find an order", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        else if (!int.TryParse(txtOrderId.Text, out oid))
+        {
+            MessageBox.Show(this, "Enter order Id correctly.", "Find an order", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        else
+        {
+            if (PrepareConnectionString())
+            {
+                ToggleControlsState(false);
+                await FindOrderByIdAsync(oid);
+            }
+            else
+            {
+                ShowConnectionError();
+            }
+            ToggleControlsState(true);
+        }
+    }
+
+    private async void btnFindOrderBySID_Click(object sender, EventArgs e)
+    {
+        int sid;
+        if (string.IsNullOrWhiteSpace(txtOrderId.Text))
+        {
+            MessageBox.Show(this, "Enter order session Id first.", "Find an order", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        else if (!int.TryParse(txtOrderId.Text, out sid))
+        {
+            MessageBox.Show(this, "Enter order session Id correctly.", "Find an order", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        else
+        {
+            if (PrepareConnectionString())
+            {
+                ToggleControlsState(false);
+                await FindOrdersBySessionIdAsync(sid);
+            }
+            else
+            {
+                ShowConnectionError();
+            }
+            ToggleControlsState(true);
+        }
+    }
+
+    private async void btnDeleteOrder_Click(object sender, EventArgs e)
+    {
+        if (dgOrders.RowCount == 0)
+        {
+            MessageBox.Show(this, "Select an order first.", "Delete an order", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        else
+        {
+            //Delete
+            if (PrepareConnectionString())
+            {
+                ToggleControlsState(false);
+
+                var oid = dgOrders.SelectedRows[0].Cells[0].Value;
+
+                var m = MessageBox.Show(this, $"Are you sure you want to delete order #{oid}", "Delete a session",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2);
+                if (m == DialogResult.Yes)
+                {
+                    await using var ds = NpgsqlDataSource.Create(conStr);
+
+                    var dc = ds.CreateCommand($"DELETE FROM pos_order p WHERE p.id = {oid};");
+                    try
+                    {
+                        await dc.ExecuteNonQueryAsync();
+                        MessageBox.Show(this, $"Order #{oid} was deleted successfully.", "Delete an order", MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(this, ex.Message, "Delete an order", MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                    }
+                }
+            }
+            else
+            {
+                ShowConnectionError();
+            }
+            ToggleControlsState(true);
+        }
+    }
+    #endregion
+
+    private void btnNew_Click(object sender, EventArgs e)
+    {
+        txtSessionId.Text = txtOrderId.Text = string.Empty;
+        lblSessionCount.Text = "0";
+        lblOrderCount.Text = "0";
+        dgSessions.DataSource = default;
+        dgOrders.DataSource = default;
     }
 }

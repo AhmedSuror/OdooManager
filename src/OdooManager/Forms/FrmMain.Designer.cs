@@ -32,6 +32,8 @@
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             btnExit = new ToolStripMenuItem();
+            editToolStripMenuItem = new ToolStripMenuItem();
+            btnNew = new ToolStripMenuItem();
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
             tableLayoutPanel1 = new TableLayoutPanel();
@@ -50,12 +52,23 @@
             btnLoadAllSessions = new ToolStripButton();
             toolStripLabel1 = new ToolStripLabel();
             txtSessionId = new ToolStripTextBox();
-            toolStripButton1 = new ToolStripButton();
-            lblCount = new ToolStripLabel();
+            btnFindSession = new ToolStripButton();
+            lblSessionCount = new ToolStripLabel();
             toolStripSeparator1 = new ToolStripSeparator();
             toolStripLabel2 = new ToolStripLabel();
             btnDelSession = new ToolStripButton();
             tabPage3 = new TabPage();
+            dgOrders = new DataGridView();
+            toolStrip2 = new ToolStrip();
+            btnAllOrders = new ToolStripButton();
+            toolStripLabel3 = new ToolStripLabel();
+            txtOrderId = new ToolStripTextBox();
+            btnFindOrderById = new ToolStripButton();
+            btnFindOrderBySID = new ToolStripButton();
+            lblOrderCount = new ToolStripLabel();
+            toolStripSeparator2 = new ToolStripSeparator();
+            toolStripLabel5 = new ToolStripLabel();
+            btnDeleteOrder = new ToolStripButton();
             tabPage4 = new TabPage();
             menuStrip1.SuspendLayout();
             tabControl1.SuspendLayout();
@@ -64,11 +77,14 @@
             tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgSessions).BeginInit();
             toolStrip1.SuspendLayout();
+            tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgOrders).BeginInit();
+            toolStrip2.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, editToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(800, 24);
@@ -88,6 +104,20 @@
             btnExit.Size = new Size(93, 22);
             btnExit.Text = "Exit";
             btnExit.Click += btnExit_Click;
+            // 
+            // editToolStripMenuItem
+            // 
+            editToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { btnNew });
+            editToolStripMenuItem.Name = "editToolStripMenuItem";
+            editToolStripMenuItem.Size = new Size(39, 20);
+            editToolStripMenuItem.Text = "Edit";
+            // 
+            // btnNew
+            // 
+            btnNew.Name = "btnNew";
+            btnNew.Size = new Size(190, 22);
+            btnNew.Text = "Clear all search results";
+            btnNew.Click += btnNew_Click;
             // 
             // tabControl1
             // 
@@ -257,8 +287,9 @@
             // 
             // toolStrip1
             // 
-            toolStrip1.Items.AddRange(new ToolStripItem[] { btnLoadAllSessions, toolStripLabel1, txtSessionId, toolStripButton1, lblCount, toolStripSeparator1, toolStripLabel2, btnDelSession });
+            toolStrip1.Items.AddRange(new ToolStripItem[] { btnLoadAllSessions, toolStripLabel1, txtSessionId, btnFindSession, lblSessionCount, toolStripSeparator1, toolStripLabel2, btnDelSession });
             toolStrip1.Location = new Point(3, 3);
+            toolStrip1.Margin = new Padding(3, 0, 3, 0);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.Size = new Size(786, 25);
             toolStrip1.TabIndex = 0;
@@ -266,9 +297,11 @@
             // 
             // btnLoadAllSessions
             // 
+            btnLoadAllSessions.BackColor = Color.Lime;
             btnLoadAllSessions.DisplayStyle = ToolStripItemDisplayStyle.Text;
             btnLoadAllSessions.Image = (Image)resources.GetObject("btnLoadAllSessions.Image");
             btnLoadAllSessions.ImageTransparentColor = Color.Magenta;
+            btnLoadAllSessions.Margin = new Padding(3, 1, 3, 2);
             btnLoadAllSessions.Name = "btnLoadAllSessions";
             btnLoadAllSessions.Size = new Size(98, 22);
             btnLoadAllSessions.Text = "Load all sessions";
@@ -276,31 +309,38 @@
             // 
             // toolStripLabel1
             // 
+            toolStripLabel1.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            toolStripLabel1.Margin = new Padding(3, 1, 3, 2);
             toolStripLabel1.Name = "toolStripLabel1";
-            toolStripLabel1.Size = new Size(71, 22);
+            toolStripLabel1.Size = new Size(72, 22);
             toolStripLabel1.Text = "Find session";
             // 
             // txtSessionId
             // 
+            txtSessionId.BorderStyle = BorderStyle.FixedSingle;
+            txtSessionId.Margin = new Padding(3, 0, 3, 0);
             txtSessionId.Name = "txtSessionId";
             txtSessionId.Size = new Size(100, 25);
             // 
-            // toolStripButton1
+            // btnFindSession
             // 
-            toolStripButton1.DisplayStyle = ToolStripItemDisplayStyle.Text;
-            toolStripButton1.Image = (Image)resources.GetObject("toolStripButton1.Image");
-            toolStripButton1.ImageTransparentColor = Color.Magenta;
-            toolStripButton1.Name = "toolStripButton1";
-            toolStripButton1.Size = new Size(34, 22);
-            toolStripButton1.Text = "Find";
-            toolStripButton1.Click += toolStripButton1_Click;
+            btnFindSession.BackColor = Color.Green;
+            btnFindSession.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            btnFindSession.ForeColor = Color.White;
+            btnFindSession.Image = (Image)resources.GetObject("btnFindSession.Image");
+            btnFindSession.ImageTransparentColor = Color.Magenta;
+            btnFindSession.Margin = new Padding(3, 1, 3, 2);
+            btnFindSession.Name = "btnFindSession";
+            btnFindSession.Size = new Size(34, 22);
+            btnFindSession.Text = "Find";
+            btnFindSession.Click += btnFindSession_Click;
             // 
-            // lblCount
+            // lblSessionCount
             // 
-            lblCount.Alignment = ToolStripItemAlignment.Right;
-            lblCount.Name = "lblCount";
-            lblCount.Size = new Size(13, 22);
-            lblCount.Text = "0";
+            lblSessionCount.Alignment = ToolStripItemAlignment.Right;
+            lblSessionCount.Name = "lblSessionCount";
+            lblSessionCount.Size = new Size(13, 22);
+            lblSessionCount.Text = "0";
             // 
             // toolStripSeparator1
             // 
@@ -310,16 +350,19 @@
             // toolStripLabel2
             // 
             toolStripLabel2.Alignment = ToolStripItemAlignment.Right;
+            toolStripLabel2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             toolStripLabel2.Name = "toolStripLabel2";
             toolStripLabel2.Size = new Size(43, 22);
             toolStripLabel2.Text = "Count:";
             // 
             // btnDelSession
             // 
+            btnDelSession.BackColor = Color.Red;
             btnDelSession.DisplayStyle = ToolStripItemDisplayStyle.Text;
-            btnDelSession.ForeColor = Color.Red;
+            btnDelSession.ForeColor = Color.White;
             btnDelSession.Image = (Image)resources.GetObject("btnDelSession.Image");
             btnDelSession.ImageTransparentColor = Color.Magenta;
+            btnDelSession.Margin = new Padding(3, 1, 3, 2);
             btnDelSession.Name = "btnDelSession";
             btnDelSession.Size = new Size(44, 22);
             btnDelSession.Text = "Delete";
@@ -327,6 +370,8 @@
             // 
             // tabPage3
             // 
+            tabPage3.Controls.Add(dgOrders);
+            tabPage3.Controls.Add(toolStrip2);
             tabPage3.Location = new Point(4, 24);
             tabPage3.Name = "tabPage3";
             tabPage3.Padding = new Padding(3);
@@ -334,6 +379,113 @@
             tabPage3.TabIndex = 2;
             tabPage3.Text = "Orders";
             tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // dgOrders
+            // 
+            dgOrders.AllowUserToAddRows = false;
+            dgOrders.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgOrders.Dock = DockStyle.Fill;
+            dgOrders.Location = new Point(3, 28);
+            dgOrders.Name = "dgOrders";
+            dgOrders.ReadOnly = true;
+            dgOrders.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgOrders.Size = new Size(786, 367);
+            dgOrders.TabIndex = 3;
+            // 
+            // toolStrip2
+            // 
+            toolStrip2.Items.AddRange(new ToolStripItem[] { btnAllOrders, toolStripLabel3, txtOrderId, btnFindOrderById, btnFindOrderBySID, lblOrderCount, toolStripSeparator2, toolStripLabel5, btnDeleteOrder });
+            toolStrip2.Location = new Point(3, 3);
+            toolStrip2.Name = "toolStrip2";
+            toolStrip2.Size = new Size(786, 25);
+            toolStrip2.TabIndex = 2;
+            toolStrip2.Text = "toolStrip2";
+            // 
+            // btnAllOrders
+            // 
+            btnAllOrders.BackColor = Color.Lime;
+            btnAllOrders.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            btnAllOrders.Image = (Image)resources.GetObject("btnAllOrders.Image");
+            btnAllOrders.ImageTransparentColor = Color.Magenta;
+            btnAllOrders.Margin = new Padding(3, 1, 3, 2);
+            btnAllOrders.Name = "btnAllOrders";
+            btnAllOrders.Size = new Size(88, 22);
+            btnAllOrders.Text = "Load all orders";
+            btnAllOrders.Click += btnAllOrders_Click;
+            // 
+            // toolStripLabel3
+            // 
+            toolStripLabel3.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            toolStripLabel3.Margin = new Padding(3, 1, 3, 2);
+            toolStripLabel3.Name = "toolStripLabel3";
+            toolStripLabel3.Size = new Size(64, 22);
+            toolStripLabel3.Text = "Find order";
+            // 
+            // txtOrderId
+            // 
+            txtOrderId.BorderStyle = BorderStyle.FixedSingle;
+            txtOrderId.Margin = new Padding(3, 0, 3, 0);
+            txtOrderId.Name = "txtOrderId";
+            txtOrderId.Size = new Size(100, 25);
+            // 
+            // btnFindOrderById
+            // 
+            btnFindOrderById.BackColor = Color.Green;
+            btnFindOrderById.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            btnFindOrderById.ForeColor = Color.White;
+            btnFindOrderById.Image = (Image)resources.GetObject("btnFindOrderById.Image");
+            btnFindOrderById.ImageTransparentColor = Color.Magenta;
+            btnFindOrderById.Margin = new Padding(3, 1, 3, 2);
+            btnFindOrderById.Name = "btnFindOrderById";
+            btnFindOrderById.Size = new Size(64, 22);
+            btnFindOrderById.Text = "Find by ID";
+            btnFindOrderById.Click += btnFindOrderById_Click;
+            // 
+            // btnFindOrderBySID
+            // 
+            btnFindOrderBySID.BackColor = Color.MediumSeaGreen;
+            btnFindOrderBySID.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            btnFindOrderBySID.ForeColor = Color.White;
+            btnFindOrderBySID.Image = (Image)resources.GetObject("btnFindOrderBySID.Image");
+            btnFindOrderBySID.ImageTransparentColor = Color.Magenta;
+            btnFindOrderBySID.Margin = new Padding(3, 1, 3, 2);
+            btnFindOrderBySID.Name = "btnFindOrderBySID";
+            btnFindOrderBySID.Size = new Size(70, 22);
+            btnFindOrderBySID.Text = "Find by SID";
+            btnFindOrderBySID.Click += btnFindOrderBySID_Click;
+            // 
+            // lblOrderCount
+            // 
+            lblOrderCount.Alignment = ToolStripItemAlignment.Right;
+            lblOrderCount.Name = "lblOrderCount";
+            lblOrderCount.Size = new Size(13, 22);
+            lblOrderCount.Text = "0";
+            // 
+            // toolStripSeparator2
+            // 
+            toolStripSeparator2.Name = "toolStripSeparator2";
+            toolStripSeparator2.Size = new Size(6, 25);
+            // 
+            // toolStripLabel5
+            // 
+            toolStripLabel5.Alignment = ToolStripItemAlignment.Right;
+            toolStripLabel5.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            toolStripLabel5.Name = "toolStripLabel5";
+            toolStripLabel5.Size = new Size(43, 22);
+            toolStripLabel5.Text = "Count:";
+            // 
+            // btnDeleteOrder
+            // 
+            btnDeleteOrder.BackColor = Color.Red;
+            btnDeleteOrder.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            btnDeleteOrder.ForeColor = Color.White;
+            btnDeleteOrder.Image = (Image)resources.GetObject("btnDeleteOrder.Image");
+            btnDeleteOrder.ImageTransparentColor = Color.Magenta;
+            btnDeleteOrder.Margin = new Padding(3, 1, 3, 2);
+            btnDeleteOrder.Name = "btnDeleteOrder";
+            btnDeleteOrder.Size = new Size(44, 22);
+            btnDeleteOrder.Text = "Delete";
+            btnDeleteOrder.Click += btnDeleteOrder_Click;
             // 
             // tabPage4
             // 
@@ -368,6 +520,11 @@
             ((System.ComponentModel.ISupportInitialize)dgSessions).EndInit();
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();
+            tabPage3.ResumeLayout(false);
+            tabPage3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgOrders).EndInit();
+            toolStrip2.ResumeLayout(false);
+            toolStrip2.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -396,10 +553,23 @@
         private ToolStripButton btnLoadAllSessions;
         private ToolStripLabel toolStripLabel1;
         private ToolStripTextBox txtSessionId;
-        private ToolStripButton toolStripButton1;
+        private ToolStripButton btnFindSession;
         private ToolStripLabel toolStripLabel2;
-        private ToolStripLabel lblCount;
+        private ToolStripLabel lblSessionCount;
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripButton btnDelSession;
+        private DataGridView dgOrders;
+        private ToolStrip toolStrip2;
+        private ToolStripButton btnAllOrders;
+        private ToolStripLabel toolStripLabel3;
+        private ToolStripTextBox txtOrderId;
+        private ToolStripButton btnFindOrderBySID;
+        private ToolStripLabel lblOrderCount;
+        private ToolStripSeparator toolStripSeparator2;
+        private ToolStripLabel toolStripLabel5;
+        private ToolStripButton btnDeleteOrder;
+        private ToolStripButton btnFindOrderById;
+        private ToolStripMenuItem editToolStripMenuItem;
+        private ToolStripMenuItem btnNew;
     }
 }
